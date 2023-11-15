@@ -26,7 +26,7 @@ export default function NavBar() {
     return(
       <React.Fragment>
         {menuItems.map((item,i) =>(
-          <Button color="inherit">
+          <Button key={i} color="inherit">
           <Link href={item.route}>{item.page}</Link>
         </Button>
         ))}
