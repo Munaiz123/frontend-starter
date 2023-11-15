@@ -15,7 +15,7 @@ const menuItems = [
   // {page:"Contact", route:'/contact'},
 ]
 
-export default function NavBar() {
+export default function NavBar({pos}) {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   const onClickLogin = event =>{
@@ -52,8 +52,7 @@ export default function NavBar() {
   }
 
   return (
-    <Box>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
 
           {isLoggedIn && <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} >
@@ -68,6 +67,5 @@ export default function NavBar() {
         
         </Toolbar>
       </AppBar>
-    </Box>
   );
 }

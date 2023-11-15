@@ -5,7 +5,6 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <h1>Welcome to Easy Audit!</h1>
-      
     </main>
   )
 }

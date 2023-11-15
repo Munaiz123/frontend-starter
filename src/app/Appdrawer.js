@@ -22,7 +22,7 @@ export default function AppDrawer() {
   };
 
   const menuItems = [
-    {page:"Test", route:'/test'}
+    {page:"Home", route:'/dashboard'}
   ]
 
   const list = (anchor) => (
