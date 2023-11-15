@@ -2,12 +2,10 @@ import Image from 'next/image'
 import styles from '../page.module.css'
 
 async function getData(){
-
-  const res = await fetch("https://e6fzx0p7md.execute-api.us-east-1.amazonaws.com/dev")
-
-  if(!res.ok) throw new Error('Failed to fetch data')
-
-  return res.json()
+  
+  console.log('----------------------------')
+  console.log('----------------------------')
+  const {data} = await fetch("https://e6fzx0p7md.execute-api.us-east-1.amazonaws.com/dev")
 }
 
 export default async function Home() {

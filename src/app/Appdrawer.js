@@ -1,4 +1,3 @@
-"use client"
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
@@ -14,12 +13,7 @@ import Link from 'next/link';
 
 export default function AppDrawer() {
   const [state, setState] = useState({left: false})
-  const [isClient, setIsClient] = useState(false)
-
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
-
+  
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
@@ -28,9 +22,7 @@ export default function AppDrawer() {
   };
 
   const menuItems = [
-    {page:"Home", route:'/'},
-    {page:"About", route:'/about'},
-    {page:"Contact", route:'/contact'},
+    {page:"Test", route:'/test'}
   ]
 
   const list = (anchor) => (
@@ -58,7 +50,7 @@ export default function AppDrawer() {
   );
 
   return (
-    isClient && <div>
+     <div>
       {['Menu'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button style={{color:'white'}} onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
@@ -68,6 +60,6 @@ export default function AppDrawer() {
         </React.Fragment>
       ))}
     </div>
+
   );
 }
-
