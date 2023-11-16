@@ -20,8 +20,11 @@ export default function SignIn() {
     })
 
   const handleSubmit = (event) => {
+    
     event.preventDefault();
+    
     const data = new FormData(event.currentTarget);
+    
     console.log({
       email: data.get('email'),
       password: data.get('password'),
@@ -47,7 +50,7 @@ export default function SignIn() {
             Sign in
           </Typography>
           <Box component="form" 
-            // onSubmit={handleSubmit}
+            onSubmit={handleSubmit}
             noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
@@ -84,8 +87,10 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link variant="body2">
-                    <LinkRoute href="/signup">Don't have an account? Sign Up</LinkRoute>
+                <Link variant="body2" href="/signup" >
+                    {/* <LinkRoute variant="body2" href="/signup"> */}
+                      Don't have an account? Sign Up
+                      {/* </LinkRoute> */}
                 </Link>
               </Grid>
             </Grid>

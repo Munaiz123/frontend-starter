@@ -51,9 +51,9 @@ export default function AppDrawer() {
 
   return (
      <div>
-      {['Menu'].map((anchor) => (
+      {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button style={{color:'white'}} onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
+          <Button style={{color:'white'}} onClick={toggleDrawer(anchor, true)}>Menu</Button>
           <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)} >
             {list(anchor)}
           </Drawer>

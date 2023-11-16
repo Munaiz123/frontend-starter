@@ -1,11 +1,9 @@
 "use client"
 import React, { useState} from 'react';
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import AppDrawer from './Appdrawer';
 import Link from 'next/link';
 
@@ -55,15 +53,9 @@ export default function NavBar({pos}) {
       <AppBar position="fixed">
         <Toolbar>
 
-          {isLoggedIn && <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} >
-            < AppDrawer />
-          </IconButton>}
-
+          {isLoggedIn && < AppDrawer />}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}></Typography>
-
-          {!isLoggedIn && renderLogin()}
-          {isLoggedIn && renderLogout()}
-        
+          {!isLoggedIn ? renderLogin() : renderLogout()}
         
         </Toolbar>
       </AppBar>

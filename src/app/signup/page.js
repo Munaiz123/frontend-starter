@@ -20,11 +20,14 @@ export default function SignUp() {
     })
 
   const handleSubmit = (event) => {
+    console.log("🚀 ~ file: page.js:23 ~ handleSubmit ~ event:", event)
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    console.log("🚀 ~ file: page.js:26 ~ handleSubmit ~ data:", data.entries())
+    console.log("data",{
       email: data.get('email'),
       password: data.get('password'),
+      firstName: data.get('')
     });
   };
 
@@ -47,7 +50,7 @@ export default function SignUp() {
             Sign Up
           </Typography>
           <Box component="form" 
-            // onSubmit={handleSubmit}
+            onSubmit={handleSubmit}
             noValidate sx={{ mt: 1 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -117,8 +120,10 @@ export default function SignUp() {
                 </Link>
               </Grid> */}
               <Grid item>
-                <Link variant="body2">
-                    <LinkRoute href="/login">Already have an account? Sign In</LinkRoute>
+                <Link variant="body2" href="/login" >
+                    {/* <LinkRoute variant="body2" href="/signup"> */}
+                    Already have an account? Sign In
+                      {/* </LinkRoute> */}
                 </Link>
               </Grid>
             </Grid>
