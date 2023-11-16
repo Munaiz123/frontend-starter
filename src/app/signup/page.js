@@ -12,6 +12,11 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
+import { AWS_CONFIG } from '@/utils/utils';
+
+import { CognitoIdentityProviderClient, SignUpCommand } from "@aws-sdk/client-cognito-identity-provider";
+const client = new CognitoIdentityProviderClient(AWS_CONFIG);
+
 export default function SignUp() {
     const [isClient, setIsClient] = useState(false)
 
@@ -20,10 +25,8 @@ export default function SignUp() {
     })
 
   const handleSubmit = (event) => {
-    console.log("🚀 ~ file: page.js:23 ~ handleSubmit ~ event:", event)
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log("🚀 ~ file: page.js:26 ~ handleSubmit ~ data:", data.entries())
     console.log("data",{
       email: data.get('email'),
       password: data.get('password'),
