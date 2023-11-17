@@ -1,5 +1,5 @@
 "use client"
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect, use} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -10,17 +10,16 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
 import { CognitoIdentityProviderClient, SignUpCommand } from "@aws-sdk/client-cognito-identity-provider";
-
 import { AWS_CONFIG, SIGN_UP_OBJ } from '@/utils/utils';
 
 import ConfirmSignUp from './confirmSignUp';
-
 import styles from '../page.module.css'
 
 
 export default function SignUp() {
     const [isClient, setIsClient] = useState(false)
     const [showConfirmPage, setShowConfirmPage] = useState(false)
+    const [userData, setUserData] = useState(undefined)
 
     useEffect(()=>{
         setIsClient(true)
@@ -31,19 +30,30 @@ export default function SignUp() {
     
     let data = new FormData(event.currentTarget);
     let userPoolReqObj = createUserpoolObj(data,SIGN_UP_OBJ)
-    let client = new CognitoIdentityProviderClient(AWS_CONFIG);
+    let client = new CognitoIdentityProviderClient(AWS_CONFIG); // connects to AWS Cognito
+
     let command = new SignUpCommand(userPoolReqObj);
-    console.log("🚀 ~ file: page.js:36 ~ handleSubmit ~ command:", command)
-    
+  
 
     try {
-      // let response = await client.send(command);
-      // console.log("🚀 ~ file: page.js:35 ~ handleSubmit ~ RESPONSE:", JSON.stringify(response))
-      // if(response.$metadata.httpStatusCode === 200) setShowConfirmPage(true)
-      setShowConfirmPage(true)
+      let response = await client.send(command);
+      console.log("Sign Up RESPONSE: ~> ", JSON.stringify(response))
+      
+      if(response.$metadata.httpStatusCode === 200){
+
+        let obj = {
+          sub:response.$metadata.UserSub,
+          userName:command.input.Username,
+          email:data.get('email'),
+          firstName:data.get('firstName'),
+          lastName:data.get('lastName')
+        }
+        setUserData(obj)
+        setShowConfirmPage(true)
+      }   
       
     } catch (error) {
-      console.error("🚀 ~ file: page.js:37 ~ handleSubmit ~ ERROR =>>:", error)
+      console.error("Sign Up API ERROR => ", error)
     }
     
   };
@@ -77,7 +87,7 @@ export default function SignUp() {
   return (
       isClient && <main className={styles.main}>
 
-      {showConfirmPage ? < ConfirmSignUp/> :
+      {showConfirmPage ? < ConfirmSignUp userData={userData} /> :
       
       <Container component="main" maxWidth="xs">
         {/* <CssBaseline /> */}
@@ -178,12 +188,3 @@ export default function SignUp() {
       </main>
   );
 }
-
-
-  // console.log("data",{
-    //   email: data.get('email'),
-    //   password: data.get('password'),
-    //   confirmPassword:data.get('confirmPassword'),
-    //   firstName: data.get('firstName'),
-    //   lastName: data.get('lastName')
-    // });

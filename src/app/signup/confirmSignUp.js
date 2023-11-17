@@ -1,5 +1,7 @@
 "use client"
 import React,{useState,useEffect} from 'react';
+import { useRouter } from 'next/navigation';
+
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -10,24 +12,55 @@ import Container from '@mui/material/Container';
 
 import styles from '../page.module.css'
 
-export default function ConfirmSignUp() {
+import { AWS_CONFIG, CONFIRM_SIGN_UP_OBJ } from '@/utils/utils';
+import { CognitoIdentityProviderClient, ConfirmSignUpCommand } from "@aws-sdk/client-cognito-identity-provider";
+
+export default function ConfirmSignUp(props) {
+    const { push } = useRouter();
+
     const [isClient, setIsClient] = useState(false)
+    const [userData, setUserData] = useState(undefined)
 
     useEffect(()=>{
         setIsClient(true)
-    })
+        setUserData(props.userData)
+    },[])
 
-  const handleSubmit = (event) => {
-    
+  const handleSubmit = async event => {
     event.preventDefault();
     
-    const data = new FormData(event.currentTarget);
-    
-    console.log({
-      cofirmCode: data.get('confirmCode'),
-      password: data.get('password'),
-    });
+    let data = new FormData(event.currentTarget);
+    let userPoolConfirmReqObj = createUserpoolConfirmObj(data, CONFIRM_SIGN_UP_OBJ)
+    console.log('Cofirm REQ Obj =>> ', userPoolConfirmReqObj)
+
+    let client = new CognitoIdentityProviderClient(AWS_CONFIG);
+    let command = new ConfirmSignUpCommand(userPoolConfirmReqObj);
+
+    try {
+        const response = await client.send(command);
+        console.log(" Confirm Sign Up ~> API response:", JSON.stringify(response))
+        if(response.$metadata.httpStatusCode === 200){
+            
+            push('/dashboard');
+        }
+
+    } catch (error) {
+        console.error("Cofirm Sign UP ~> API - Error:", error)   
+    }
   };
+
+  const createUserpoolConfirmObj = (data, CONFIRM_SIGN_UP_OBJ) => {
+
+    let {firstName, email, lastName, sub, userName} = userData
+
+    CONFIRM_SIGN_UP_OBJ.ConfirmationCode = data.get('confirmCode')
+    CONFIRM_SIGN_UP_OBJ.Username = userName
+    CONFIRM_SIGN_UP_OBJ.email = email
+    CONFIRM_SIGN_UP_OBJ.sub = sub
+
+    return CONFIRM_SIGN_UP_OBJ
+  }
+
 
   return (
       isClient && <main className={styles.main}>
