@@ -1,7 +1,4 @@
 "use client"
-import LinkRoute from 'next/link';
-import styles from '../page.module.css'
-
 import React,{useState,useEffect} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -12,30 +9,76 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
-import { AWS_CONFIG } from '@/utils/utils';
-
 import { CognitoIdentityProviderClient, SignUpCommand } from "@aws-sdk/client-cognito-identity-provider";
-const client = new CognitoIdentityProviderClient(AWS_CONFIG);
+
+import { AWS_CONFIG, SIGN_UP_OBJ } from '@/utils/utils';
+
+import ConfirmSignUp from './confirmSignUp';
+
+import styles from '../page.module.css'
+
 
 export default function SignUp() {
     const [isClient, setIsClient] = useState(false)
+    const [showConfirmPage, setShowConfirmPage] = useState(false)
 
     useEffect(()=>{
         setIsClient(true)
     })
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log("data",{
-      email: data.get('email'),
-      password: data.get('password'),
-      firstName: data.get('')
-    });
+    
+    let data = new FormData(event.currentTarget);
+    let userPoolReqObj = createUserpoolObj(data,SIGN_UP_OBJ)
+    let client = new CognitoIdentityProviderClient(AWS_CONFIG);
+    let command = new SignUpCommand(userPoolReqObj);
+    console.log("🚀 ~ file: page.js:36 ~ handleSubmit ~ command:", command)
+    
+
+    try {
+      // let response = await client.send(command);
+      // console.log("🚀 ~ file: page.js:35 ~ handleSubmit ~ RESPONSE:", JSON.stringify(response))
+      // if(response.$metadata.httpStatusCode === 200) setShowConfirmPage(true)
+      setShowConfirmPage(true)
+      
+    } catch (error) {
+      console.error("🚀 ~ file: page.js:37 ~ handleSubmit ~ ERROR =>>:", error)
+    }
+    
   };
+
+  const createUserpoolObj = (data, SIGN_UP_OBJ) => {
+    SIGN_UP_OBJ.Username = data.get('firstName')
+    SIGN_UP_OBJ.Password = data.get('password')
+    
+    SIGN_UP_OBJ.UserAttributes = [
+      {
+        Name:'name',
+        Value:`${data.get('firstName')} ${data.get('lastName')}`
+      },
+      {
+        Name:"email",
+        Value:data.get('email')
+      }
+    ]
+
+    SIGN_UP_OBJ.ValidationData = [
+      {
+        Name: "Username", // required
+        Value: data.get('firstName'),
+      }
+    ]
+
+    return SIGN_UP_OBJ
+
+  }
 
   return (
       isClient && <main className={styles.main}>
+
+      {showConfirmPage ? < ConfirmSignUp/> :
+      
       <Container component="main" maxWidth="xs">
         {/* <CssBaseline /> */}
         <Box
@@ -47,11 +90,10 @@ export default function SignUp() {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            {/* <LockOutlinedIcon /> */}
+
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign Up
-          </Typography>
+          <Typography component="h1" variant="h5"> Sign Up </Typography>
+          
           <Box component="form" 
             onSubmit={handleSubmit}
             noValidate sx={{ mt: 1 }}>
@@ -98,15 +140,15 @@ export default function SignUp() {
               id="password"
               autoComplete="new-password"
             />
-            <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="confirmPassword"
-                label="Confirm Password"
-                type="password"
-                id="confirmPassword"
-                autoComplete="new-password"
+             <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              id="confirmPassword"
+              autoComplete="new-password"
             />
             <Button
               type="submit"
@@ -132,7 +174,16 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-      </Container>
+      </Container>}
       </main>
   );
 }
+
+
+  // console.log("data",{
+    //   email: data.get('email'),
+    //   password: data.get('password'),
+    //   confirmPassword:data.get('confirmPassword'),
+    //   firstName: data.get('firstName'),
+    //   lastName: data.get('lastName')
+    // });

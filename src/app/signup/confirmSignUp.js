@@ -1,18 +1,16 @@
 "use client"
-
 import React,{useState,useEffect} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
+
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
 import styles from '../page.module.css'
 
-export default function SignIn() {
+export default function ConfirmSignUp() {
     const [isClient, setIsClient] = useState(false)
 
     useEffect(()=>{
@@ -26,7 +24,7 @@ export default function SignIn() {
     const data = new FormData(event.currentTarget);
     
     console.log({
-      email: data.get('email'),
+      cofirmCode: data.get('confirmCode'),
       password: data.get('password'),
     });
   };
@@ -34,43 +32,29 @@ export default function SignIn() {
   return (
       isClient && <main className={styles.main}>
       <Container component="main" maxWidth="xs">
-        {/* <CssBaseline /> */}
         <Box
           sx={{
             marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            {/* <LockOutlinedIcon /> */}
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
+          }}>
+            
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}></Avatar>
+          <Typography component="h3" variant="h5"> Check Your Email</Typography>
+          
           <Box component="form" 
             onSubmit={handleSubmit}
             noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
-              required
+            //   required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
+              name="confirmCode"
+              label="Enter your code"
+              type="confirmCode"
+              id="confirmCode"
+              autoComplete="confirmCode"
             />
             <Button
               type="submit"
@@ -78,22 +62,8 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Confirm
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link variant="body2" href="/signup" >
-                    {/* <LinkRoute variant="body2" href="/signup"> */}
-                      Don't have an account? Sign Up
-                      {/* </LinkRoute> */}
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
         </Box>
       </Container>

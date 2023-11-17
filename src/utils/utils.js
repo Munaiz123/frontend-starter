@@ -1,14 +1,11 @@
 export const AWS_CONFIG = {
-    region: process.env.REGION,
-    accessKeyId: process.env.AWS_COGNITO_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_COGNITO_ACCESS_SECRET
+    region: process.env.NEXT_PUBLIC_REGION,
+    accessKeyId: process.env.NEXT_PUBLIC_AWS_COGNITO_ACCESS_KEY,
+    secretAccessKey: process.env.NEXT_PUBLIC_AWS_COGNITO_ACCESS_SECRET
 }
 
-export const USER_POOL_CLIENT_ID = process.env.USER_POOL_CLIENT_ID
-
-
-export const input = { // SignUpRequest
-    ClientId: "STRING_VALUE", 
+export const SIGN_UP_OBJ = { // SignUpRequest
+    ClientId: process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID,
     // SecretHash: "STRING_VALUE",
     Username: "userName", // required
     Password: "userPass", // required
@@ -28,7 +25,7 @@ export const input = { // SignUpRequest
         Value: "STRING_VALUE",
       }
     ],
-    ClientMetadata: { // ClientMetadataType
-      "<key,value>": "pair",
-    },
+    // ClientMetadata: { // ClientMetadataType
+    //   "<key,value>": "pair",
+    // },
   };
