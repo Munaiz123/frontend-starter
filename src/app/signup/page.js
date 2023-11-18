@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
 import { CognitoIdentityProviderClient, SignUpCommand } from "@aws-sdk/client-cognito-identity-provider";
-import { AWS_CONFIG, SIGN_UP_OBJ } from '@/utils/utils';
+import { AWS_CONFIG, SIGN_UP_OBJ, base64Encode} from '@/utils/utils';
 
 import ConfirmSignUp from './confirmSignUp';
 import styles from '../page.module.css'
@@ -43,42 +43,46 @@ export default function SignUp() {
 
         let obj = {
           sub:response.$metadata.UserSub,
-          userName:command.input.Username,
+          userName:data.get('email'),
           email:data.get('email'),
           firstName:data.get('firstName'),
-          lastName:data.get('lastName')
+          lastName:data.get('lastName'),
+          phoneNumber:data.get('phoneNumber')
         }
         setUserData(obj)
         setShowConfirmPage(true)
       }   
       
     } catch (error) {
-      console.error("Sign Up API ERROR => ", error)
+      console.error("Sign Up API ERROR => ", JSON.stringify(error))
+      console.log(error)
     }
     
   };
 
   const createUserpoolObj = (data, SIGN_UP_OBJ) => {
-    SIGN_UP_OBJ.Username = data.get('firstName')
+    SIGN_UP_OBJ.Username = data.get('email')
     SIGN_UP_OBJ.Password = data.get('password')
     
     SIGN_UP_OBJ.UserAttributes = [
       {
-        Name:'name',
-        Value:`${data.get('firstName')} ${data.get('lastName')}`
+        Name:'given_name',
+        Value:data.get('firstName')
+      },
+      {
+        Name:'family_name',
+        Value:data.get('lastName')
       },
       {
         Name:"email",
         Value:data.get('email')
-      }
-    ]
-
-    SIGN_UP_OBJ.ValidationData = [
+      },
       {
-        Name: "Username", // required
-        Value: data.get('firstName'),
+        Name:'phone_number',
+        Value:`+1${data.get('phoneNumber')}`
       }
     ]
+    console.log(SIGN_UP_OBJ)
 
     return SIGN_UP_OBJ
 
@@ -138,6 +142,16 @@ export default function SignUp() {
               label="Email Address"
               name="email"
               autoComplete="email"
+              autoFocus
+            />
+             <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="phoneNumber"
+              label="Phone Number"
+              name="phoneNumber"
+              autoComplete="tel"
               autoFocus
             />
             <TextField

@@ -40,7 +40,6 @@ export default function ConfirmSignUp(props) {
         const response = await client.send(command);
         console.log(" Confirm Sign Up ~> API response:", JSON.stringify(response))
         if(response.$metadata.httpStatusCode === 200){
-            
             push('/dashboard');
         }
 
@@ -50,8 +49,10 @@ export default function ConfirmSignUp(props) {
   };
 
   const createUserpoolConfirmObj = (data, CONFIRM_SIGN_UP_OBJ) => {
+    // required attributes to confirm in cognito:
+      // clientID(already attached), Username, ConfirmationCode
 
-    let {firstName, email, lastName, sub, userName} = userData
+    let {email, sub, userName } = userData
 
     CONFIRM_SIGN_UP_OBJ.ConfirmationCode = data.get('confirmCode')
     CONFIRM_SIGN_UP_OBJ.Username = userName

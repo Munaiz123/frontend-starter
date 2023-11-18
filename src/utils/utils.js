@@ -6,7 +6,6 @@ export const AWS_CONFIG = {
 
 export const SIGN_UP_OBJ = { // SignUpRequest
     ClientId: process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID,
-    // SecretHash: "STRING_VALUE",
     Username: "userName", // required
     Password: "userPass", // required
     UserAttributes: [ // AttributeListType
@@ -32,7 +31,6 @@ export const SIGN_UP_OBJ = { // SignUpRequest
 
   export const CONFIRM_SIGN_UP_OBJ = { // Confirm SignUp Request
     ClientId: process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID, // required
-    // SecretHash: "STRING_VALUE",
     Username: "STRING_VALUE", // required
     ConfirmationCode: "STRING_VALUE", // required
     ForceAliasCreation: false, // default 
